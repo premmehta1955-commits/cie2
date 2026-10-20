@@ -1,0 +1,652 @@
+@model List<HospitalAppointmentSystem.Controllers.Post>
+
+@{
+    ViewData["Title"] = "Health & Wellness Articles";
+}
+
+<style>
+    .posts-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .posts-header h1 {
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .posts-header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .info-banner {
+        background: #e0f2fe;
+        border-left: 4px solid #0284c7;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        color: #0555a1;
+    }
+
+    .info-banner-title {
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+
+    .info-banner-text {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .filters-box {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+    }
+
+    .filter-input {
+        padding: 12px 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        min-width: 250px;
+        transition: border-color 0.3s ease;
+    }
+
+    .filter-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .sort-dropdown {
+        padding: 12px 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        background: white;
+        transition: border-color 0.3s ease;
+    }
+
+    .sort-dropdown:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    .posts-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .post-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .post-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        border-color: #667eea;
+    }
+
+    .post-card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+    }
+
+    .post-header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .post-number {
+        font-size: 0.85rem;
+        font-weight: 600;
+        opacity: 0.9;
+    }
+
+    .post-id-badge {
+        background: rgba(255, 255, 255, 0.25);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .post-title-header {
+        font-size: 1.1rem;
+        font-weight: 700;
+        line-height: 1.3;
+        word-break: break-word;
+    }
+
+    .post-card-body {
+        padding: 25px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .article-summary {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border-left: 4px solid #667eea;
+    }
+
+    .summary-label {
+        color: #667eea;
+        font-weight: 700;
+        font-size: 0.85rem;
+        display: block;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .summary-text {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .post-metadata {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .meta-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .meta-label {
+        color: #999;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        margin-bottom: 4px;
+    }
+
+    .meta-value {
+        color: #333;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+    .full-content-preview {
+        color: #666;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        flex-grow: 1;
+        max-height: 150px;
+        overflow-y: auto;
+        padding: 12px;
+        background: #fafbfc;
+        border-radius: 6px;
+        border: 1px solid #e9ecef;
+    }
+
+    .full-content-preview::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .full-content-preview::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .full-content-preview::-webkit-scrollbar-thumb {
+        background: #667eea;
+        border-radius: 10px;
+    }
+
+    .action-footer {
+        display: flex;
+        gap: 10px;
+        margin-top: auto;
+    }
+
+    .read-more-btn {
+        flex: 1;
+        display: inline-block;
+        background: #667eea;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .read-more-btn:hover {
+        background: #764ba2;
+        transform: translateY(-2px);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    .empty-state-title {
+        font-size: 1.3rem;
+        color: #333;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .empty-state-text {
+        color: #999;
+        font-size: 1rem;
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .back-btn:hover {
+        transform: translateX(-5px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    .posts-stats {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        color: #999;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .modal-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-backdrop.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        max-width: 700px;
+        max-height: 80vh;
+        overflow-y: auto;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 15px;
+    }
+
+    .modal-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #333;
+        flex: 1;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #999;
+        transition: color 0.3s ease;
+    }
+
+    .close-btn:hover {
+        color: #333;
+    }
+
+    .modal-body {
+        color: #666;
+        line-height: 1.8;
+        font-size: 1rem;
+        word-break: break-word;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+        grid-column: 1 / -1;
+    }
+</style>
+
+<div class="container">
+    <div class="posts-header">
+        <h1>📚 Health & Wellness Articles</h1>
+        <p>Explore curated health insights and educational content</p>
+    </div>
+
+    <!-- Information Banner -->
+    <div class="info-banner">
+        <div class="info-banner-title">ℹ️ About These Articles</div>
+        <div class="info-banner-text">
+            These are educational health articles from our knowledge database. Please consult with our doctors for personalized medical advice. 
+            All content is for informational purposes only and should not replace professional medical consultation.
+        </div>
+    </div>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <!-- Statistics -->
+        <div class="posts-stats">
+            <div class="stat-card">
+                <div class="stat-number">@Model.Count</div>
+                <div class="stat-label">Total Articles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@(Model.Select(p => p.UserId).Distinct().Count())</div>
+                <div class="stat-label">Expert Contributors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@Model.Average(p => p.Body.Split(' ').Length).ToString("F0")</div>
+                <div class="stat-label">Avg. Article Length</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-box">
+            <input type="text" id="searchInput" class="filter-input" placeholder="🔍 Search articles by title or content..." onkeyup="filterPosts()">
+            <select id="sortSelect" class="sort-dropdown" onchange="sortPosts()">
+                <option value="recent">Sort: Most Recent</option>
+                <option value="oldest">Sort: Oldest First</option>
+                <option value="length-long">Sort: Longest Articles</option>
+                <option value="length-short">Sort: Shortest Articles</option>
+            </select>
+        </div>
+
+        <!-- Posts Grid -->
+        <div class="posts-container" id="postsContainer">
+            @foreach (var post in Model)
+            {
+                var summary = post.Body.Length > 150 ? post.Body.Substring(0, 150) + "..." : post.Body;
+                var wordCount = post.Body.Split(' ').Length;
+
+                <div class="post-card" data-title="@post.Title.ToLower()" data-body="@post.Body.ToLower()" data-id="@post.Id" data-userid="@post.UserId" data-length="@post.Body.Length">
+                    <div class="post-card-header">
+                        <div class="post-header-top">
+                            <span class="post-number">Article #@post.Id</span>
+                            <span class="post-id-badge">By Expert @post.UserId</span>
+                        </div>
+                        <h3 class="post-title-header">@post.Title</h3>
+                    </div>
+
+                    <div class="post-card-body">
+                        <!-- Article Summary Box -->
+                        <div class="article-summary">
+                            <span class="summary-label">Quick Summary</span>
+                            <div class="summary-text">@summary</div>
+                        </div>
+
+                        <!-- Metadata -->
+                        <div class="post-metadata">
+                            <div class="meta-item">
+                                <span class="meta-label">📖 Length</span>
+                                <span class="meta-value">@wordCount</span>
+                                <span style="font-size: 0.75rem; color: #999;">words</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">⏱️ Read Time</span>
+                                <span class="meta-value">@Math.Ceiling(wordCount / 200.0)</span>
+                                <span style="font-size: 0.75rem; color: #999;">min</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">👤 Expert</span>
+                                <span class="meta-value">#@post.UserId</span>
+                            </div>
+                        </div>
+
+                        <!-- Full Content Preview -->
+                        <div class="full-content-preview">
+                            @post.Body
+                        </div>
+
+                        <!-- Action Footer -->
+                        <div class="action-footer">
+                            <button class="read-more-btn" onclick="expandPost('@post.Id', '@post.Title.Replace("'", "\\'")' , '@post.Body.Replace("'", "\\'")' )">
+                                📖 Read Full Article
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">📰</div>
+            <h3 class="empty-state-title">No Articles Available</h3>
+            <p class="empty-state-text">Unable to load health articles at this time. Please try again later.</p>
+        </div>
+    }
+
+    <div style="margin-top: 40px; text-align: center;">
+        <a href="/Home/Index" class="back-btn">
+            <span>←</span>
+            <span>Back to Home</span>
+        </a>
+    </div>
+</div>
+
+<!-- Full Article Modal -->
+<div class="modal-backdrop" id="postModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div>
+                <h2 class="modal-title" id="modalTitle">Article Title</h2>
+                <p style="color: #999; font-size: 0.9rem; margin: 8px 0 0 0;">Educational Content</p>
+            </div>
+            <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            Article content will appear here...
+        </div>
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e9ecef; font-size: 0.9rem; color: #999;">
+            <strong>📌 Disclaimer:</strong> This article is for educational purposes only. Please consult with a qualified healthcare professional for medical advice.
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterPosts() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const postCards = document.querySelectorAll('.post-card');
+        let visibleCount = 0;
+
+        postCards.forEach(card => {
+            const title = card.getAttribute('data-title');
+            const body = card.getAttribute('data-body');
+
+            if (title.includes(searchInput) || body.includes(searchInput)) {
+                card.style.display = 'flex';
+                card.style.animation = 'fadeInCard 0.3s ease forwards';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (visibleCount === 0) {
+            if (!document.getElementById('noResultsMessage')) {
+                const noResults = document.createElement('div');
+                noResults.id = 'noResultsMessage';
+                noResults.className = 'no-results';
+                noResults.innerHTML = '<p>🔍 No articles found matching your search. Try different keywords.</p>';
+                document.getElementById('postsContainer').appendChild(noResults);
+            }
+        } else {
+            const noResults = document.getElementById('noResultsMessage');
+            if (noResults) noResults.remove();
+        }
+    }
+
+    function sortPosts() {
+        const sortSelect = document.getElementById('sortSelect').value;
+        const postsContainer = document.getElementById('postsContainer');
+        const postCards = Array.from(document.querySelectorAll('.post-card'));
+
+        postCards.sort((a, b) => {
+            const idA = parseInt(a.getAttribute('data-id'));
+            const idB = parseInt(b.getAttribute('data-id'));
+            const lengthA = parseInt(a.getAttribute('data-length'));
+            const lengthB = parseInt(b.getAttribute('data-length'));
+
+            switch(sortSelect) {
+                case 'recent':
+                    return idB - idA;
+                case 'oldest':
+                    return idA - idB;
+                case 'length-long':
+                    return lengthB - lengthA;
+                case 'length-short':
+                    return lengthA - lengthB;
+                default:
+                    return 0;
+            }
+        });
+
+        postCards.forEach(card => {
+            if (card.id !== 'noResultsMessage') {
+                postsContainer.appendChild(card);
+            }
+        });
+    }
+
+    function expandPost(postId, title, body) {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalBody').textContent = body;
+        document.getElementById('postModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('postModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.getElementById('postModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
+
+<style>
+    @@keyframes fadeInCard {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

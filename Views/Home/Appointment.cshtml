@@ -1,0 +1,280 @@
+﻿@model HospitalAppointmentSystem.Models.Doctor
+
+@{
+    ViewData["Title"] = "Book Appointment";
+}
+
+<style>
+    .appointment-container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .appointment-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px;
+        text-align: center;
+    }
+
+    .appointment-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .appointment-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .appointment-body {
+        padding: 40px;
+    }
+
+    .doctor-summary {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+        margin-bottom: 30px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .summary-row:last-child {
+        border-bottom: none;
+    }
+
+    .summary-label {
+        color: #666;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .summary-value {
+        color: #333;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .form-group input:required:invalid {
+        border-color: #ef4444;
+    }
+
+    .validation-message {
+        color: #ef4444;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        font-weight: 600;
+    }
+
+    .price-summary {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 30px 0;
+    }
+
+    .price-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        font-size: 1rem;
+    }
+
+    .price-row.total {
+        border-top: 2px solid #667eea;
+        padding-top: 15px;
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #667eea;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 15px 25px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .btn-secondary {
+        background: #f0f0f0;
+        color: #667eea;
+        border: 2px solid #667eea;
+    }
+
+    .btn-secondary:hover {
+        background: #667eea;
+        color: white;
+        text-decoration: none;
+    }
+
+    .info-box {
+        background: #e0f2fe;
+        border-left: 4px solid #0284c7;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        color: #0555a1;
+        font-size: 0.95rem;
+    }
+
+    </style>
+
+    <style>
+        @@media (max-width: 600px) {
+            .appointment-body {
+                padding: 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .appointment-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+
+<div class="appointment-container">
+    <div class="appointment-header">
+        <h1 class="appointment-title">📅 Schedule Appointment</h1>
+        <p class="appointment-subtitle">Book your consultation with @Model.DoctorName</p>
+    </div>
+
+    <div class="appointment-body">
+        <!-- Doctor Summary -->
+        <div class="doctor-summary">
+            <div class="summary-row">
+                <span class="summary-label">Doctor Name</span>
+                <span class="summary-value">@Model.DoctorName</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Specialty</span>
+                <span class="summary-value">@Model.Specialization</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Experience</span>
+                <span class="summary-value">@Model.Experience+ Years</span>
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            ℹ️ Please enter your full name as it appears in your identification document. You can reach out to us if you need to reschedule.
+        </div>
+
+        <!-- Appointment Form -->
+        <form method="post" action="/Home/Appointment">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="doctorId" value="@Model.DoctorId" />
+
+            <div class="form-group">
+                <label for="patientName">👤 Your Full Name <span style="color: #ef4444;">*</span></label>
+                <input type="text"
+                       id="patientName"
+                       name="patientName"
+                       placeholder="Enter your complete full name"
+                       required
+                       minlength="3"
+                       maxlength="100" />
+                @Html.ValidationMessage("patientName", new { @class = "validation-message" })
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="price-summary">
+                <div class="price-row">
+                    <span>Consultation Fee:</span>
+                    <span>₹@Model.ConsultationFee</span>
+                </div>
+                <div class="price-row">
+                    <span>Service Charge:</span>
+                    <span>₹100</span>
+                </div>
+                <div class="price-row total">
+                    <span>Total Amount:</span>
+                    <span>₹@Model.CalculateTotalCharge()</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-primary">
+                    ✓ Confirm Appointment
+                </button>
+                <a href="/Home/Index" class="btn btn-secondary">
+                    ← Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
